@@ -33,12 +33,27 @@
                     this.store.filmList = [];
                 }
             },//searchFilm
+            searchSeries() {
+                if (this.store.searchText != '') {
+                    axios.get('https://api.themoviedb.org/3/search/tv', {
+                        params: {
+                            api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
+                            query: this.store.searchText,
+                        }
+                    }).then((response) => {
+                        this.store.seriesList = response.data.results;
+                    });
+                }
+                else {
+                    this.store.seriesList = [];
+                }
+            },//searchFilm
         },//methods
     };//export
 </script>
 
 <template>
-    <AppHeader @search="searchFilm()"/>
+    <AppHeader @search="searchFilm(), searchSeries()"/>
     <AppMain/>
 </template>
 
