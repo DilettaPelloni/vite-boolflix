@@ -2,10 +2,12 @@
     import axios from 'axios';
     import {store} from './store'
     import AppHeader from './components/AppHeader.vue';
+    import AppMain from'./components/AppMain.vue';
     export default {
         name:'App',
         components: {
             AppHeader,
+            AppMain,
         },//components
         data() {
             return {
@@ -18,12 +20,10 @@
                     params: {
                         api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
                         query: this.store.searchText,
-                        language: 'it-IT',
                     }
                 }).then((response) => {
-                    console.log(response.data.results);
+                    this.store.filmList = response.data.results;
                 });
-                console.log(this.store.searchText)
             },//searchFilm
         },//methods
     };//export
@@ -31,6 +31,7 @@
 
 <template>
     <AppHeader @search="searchFilm()"/>
+    <AppMain/>
 </template>
 
 <style lang="scss">
