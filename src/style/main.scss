@@ -1,3 +1,6 @@
+//FONT
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 // RESET
 * {
     margin: 0;
@@ -5,5 +8,16 @@
     box-sizing: border-box;
 }
 
+body * {
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    padding: 0 2rem;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
 $black-bg: #141414;
 $logo-red: #e50914;
+

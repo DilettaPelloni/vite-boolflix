@@ -54,6 +54,8 @@
     </main>
 </template>
 
-<style scoped>
-    
+<style lang="scss" scoped>
+    p {
+        color: $logo-red;
+    }
 </style>
