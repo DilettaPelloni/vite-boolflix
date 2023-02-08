@@ -19,14 +19,19 @@
         },//data
         methods: {
             searchFilm() {
-                axios.get('https://api.themoviedb.org/3/search/movie', {
-                    params: {
-                        api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
-                        query: this.store.searchText,
-                    }
-                }).then((response) => {
-                    this.store.filmList = response.data.results;
-                });
+                if (this.store.searchText != '') {
+                    axios.get('https://api.themoviedb.org/3/search/movie', {
+                        params: {
+                            api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
+                            query: this.store.searchText,
+                        }
+                    }).then((response) => {
+                        this.store.filmList = response.data.results;
+                    });
+                }
+                else {
+                    this.store.filmList = [];
+                }
             },//searchFilm
         },//methods
     };//export
