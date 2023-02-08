@@ -1,61 +1,71 @@
 <script>
+    // UTILITY
     import "/node_modules/flag-icons/css/flag-icons.css";
     import {store} from '../store';
+    // COMPONENTI
+    import ResultSection from './ResultSection.vue';
+
     export default {
         name:'AppMain',
+        components: {
+           ResultSection,
+        },//components
         data() {
             return {
                 store,
             };//return
         },//data
-        methods: {
-            getStarVote(i, vote) {
-                const starVote = Math.ceil(vote / 2);
-                if(starVote >= i) {
-                    return 'fa-solid fa-star';
-                }
-                return 'fa-regular fa-star';
-            },//getStarVote
-        },//methods
     };//export
 </script>
 
 <template>
     <main>
-        <h2 v-if="store.filmList.length > 0">FILM</h2>
-        <ul>
-            <li v-for="film in store.filmList">
-                <img v-if="film.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${film.poster_path}`" :alt="film.title">
-                <p>{{ film.title }}</p>
-                <p>{{ film.original_title }}</p>
-                <p v-if="film.original_language != 'xx'" :class="`fi fi-${film.original_language}`"></p>
-                <div>
-                    <font-awesome-icon
-                    v-for="i in 5"
-                    :icon="getStarVote(i, film.vote_average)" />
-                </div>
-            </li>
-        </ul>
-        
-        <h2 v-if="store.seriesList.length > 0">SERIE TV</h2>
-        <ul>
-            <li v-for="serie in store.seriesList">
-                <img v-if="serie.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${serie.poster_path}`" :alt="serie.name">
-                <p>{{ serie.name }}</p>
-                <p>{{ serie.original_name }}</p>
-                <p v-if="serie.original_language != 'xx'" :class="`fi fi-${serie.original_language}`"></p>
-                <div>
-                    <font-awesome-icon
-                    v-for="i in 5"
-                    :icon="getStarVote(i, serie.vote_average)" />
-                </div> 
-            </li>
-        </ul>
+        <section class="welcome" v-if="store.filmList.length == 0 && store.seriesList.length == 0">
+            <div class="container">
+                <h2>
+                    Benvenuto su <span>Boolflix</span>
+                </h2>
+                <p>Scopri cosa guarderai questa sera utilizzando la barra di ricerca</p>
+            </div>
+        </section>
+        <section v-else>
+            <ResultSection section="film" :list="store.filmList"/>
+            <ResultSection section="serie" :list="store.seriesList"/>
+        </section>
     </main>
 </template>
 
 <style lang="scss" scoped>
-    p {
-        color: $logo-red;
+    main {
+        padding: 3rem 0;
+        min-height: calc(100vh - 70px);
+        background-color: $black-bg;
     }
+
+    .welcome {
+        height: 100%;
+        color: white;
+        .container {
+            min-height: calc(100vh - 70px - 6rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            h2 {
+                font-size: 5rem;
+                span {
+                    color: $logo-red;
+                    text-transform: uppercase;
+                }
+            }
+            p {
+                font-size: 1.5rem;
+                margin-top: 2rem;
+            }
+        }
+    }
+
+
+
 </style>
