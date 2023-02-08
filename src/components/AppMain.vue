@@ -8,6 +8,15 @@
                 store,
             };//return
         },//data
+        methods: {
+            getStarVote(i, vote) {
+                const starVote = Math.ceil(vote / 2);
+                if(starVote >= i) {
+                    return 'fa-solid fa-star';
+                }
+                return 'fa-regular fa-star';
+            },//getStarVote
+        },//methods
     };//export
 </script>
 
@@ -20,7 +29,11 @@
                 <p>{{ film.title }}</p>
                 <p>{{ film.original_title }}</p>
                 <p v-if="film.original_language != 'xx'" :class="`fi fi-${film.original_language}`"></p>
-                <p>{{ film.vote_average }}</p>
+                <div>
+                    <font-awesome-icon
+                    v-for="i in 5"
+                    :icon="getStarVote(i, film.vote_average)" />
+                </div>
             </li>
         </ul>
         
@@ -31,7 +44,11 @@
                 <p>{{ serie.name }}</p>
                 <p>{{ serie.original_name }}</p>
                 <p v-if="serie.original_language != 'xx'" :class="`fi fi-${serie.original_language}`"></p>
-                <p>{{ serie.vote_average }}</p>
+                <div>
+                    <font-awesome-icon
+                    v-for="i in 5"
+                    :icon="getStarVote(i, serie.vote_average)" />
+                </div> 
             </li>
         </ul>
     </main>

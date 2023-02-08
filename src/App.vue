@@ -24,6 +24,7 @@
                         params: {
                             api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
                             query: this.store.searchText,
+                            language: 'it-IT'
                         }
                     }).then((response) => {
                         this.store.filmList = response.data.results;
@@ -39,6 +40,7 @@
                         params: {
                             api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
                             query: this.store.searchText,
+                            language: 'it-IT'
                         }
                     }).then((response) => {
                         this.store.seriesList = response.data.results;
