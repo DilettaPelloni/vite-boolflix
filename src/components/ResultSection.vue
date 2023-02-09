@@ -1,5 +1,6 @@
 <script>
-    import CardElement from './CardElement.vue'
+    import {store} from '../store';
+    import CardElement from './CardElement.vue';
     export default {
         name:'ResultSection',
         components: {
@@ -9,6 +10,11 @@
             section: String,
             list: Array,
         },//props
+        data() {
+            return {
+                store,
+            };//return
+        },//data
     };//export
 </script>
 
@@ -18,7 +24,7 @@
             <h2> {{ section }}</h2>
         </div><!-- CHIUSURA CONTAINER -->
         
-        <div class="card-box">
+        <div class="card-box" v-if="store.loaded">
             <CardElement :section="section" :list="list"/>
         </div>
     </section>

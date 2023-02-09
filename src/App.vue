@@ -19,6 +19,9 @@
         },//data
         methods: {
             performSearch(arg) {
+                //per far sparire eventuale contenuto mostrato in precedenza
+                this.store.loaded = false;
+
                 const url = `https://api.themoviedb.org/3/search/${arg}`
 
                 if (this.store.searchText != '') {
@@ -38,6 +41,10 @@
                             this.store.seriesList = response.data.results;
                                 break;
                         }//switch
+                        
+                        //per far apparire il contenuto
+                        this.store.loaded = true;
+                        
                     });//richiesta
                 }//if
                 else {

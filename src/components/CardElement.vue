@@ -38,7 +38,7 @@
         <img v-if="item.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${item.poster_path}`" :alt="item[getTitle(section)]">
         <div class="info-box">
             <p>Titolo: {{ item[getTitle(section)] }}</p>
-            <p v-if="item[getTitle(section)] != item[`original_${getTitle(section)}`]">
+            <p v-if="item[getTitle(section)].toLowerCase() != item[`original_${getTitle(section)}`].toLowerCase()">
                 Titolo originale: {{ item[`original_${getTitle(section)}`]}}
             </p>
             <p>
