@@ -33,13 +33,11 @@ body * {
 }
 
 ::-webkit-scrollbar-track {
-background: $gray;
-border-radius: 10px;
+    background: $gray;
 }
 
 ::-webkit-scrollbar-thumb {
     background: white;
-    border-radius: 10px;
     &:hover {
         background: $logo-red;
     }
