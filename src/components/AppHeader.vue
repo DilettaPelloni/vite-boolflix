@@ -82,15 +82,7 @@
 
             button {
                 padding: 0 2rem;
-                background-color: $logo-red;
-                border: none;
-                color: white;
                 text-transform: uppercase;
-
-                &:hover {
-                    background-color: white;
-                    color: $black-bg;
-                }//button hover
             }//button
         }//form
     }//search-bar

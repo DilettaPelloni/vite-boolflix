@@ -24,6 +24,23 @@ body * {
     padding: 0 3rem;
 }
 
+button {
+    cursor: pointer;
+    background-color: $logo-red;
+    color: white;
+    font-weight: bold;
+    border: none;
+
+    &:hover {
+        background-color: white;
+        color: $black-bg;
+    }//button hover
+}
+
+ul {
+    list-style: none;
+}
+
 
 // SCROLLBAR
 

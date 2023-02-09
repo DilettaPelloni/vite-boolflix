@@ -15,13 +15,23 @@
                 store,
             };//return
         },//data
+        computed: {
+            sectionName() {
+                switch (this.section) {
+                    case 'movie':
+                        return 'Film'
+                    case 'tv':
+                        return 'Serie'
+                }
+            },//sectionName
+        },//computed
     };//export
 </script>
 
 <template>
     <section>
         <div class="container">
-            <h2> {{ section }}</h2>
+            <h2> {{ sectionName }}</h2>
         </div><!-- CHIUSURA CONTAINER -->
         
         <div class="card-box" v-if="store.loaded">
@@ -46,6 +56,6 @@
         margin-left: 3rem;
         display: flex;
         overflow-x: auto;
-        overflow-y: visible;
+        width: auto;
     }
 </style>

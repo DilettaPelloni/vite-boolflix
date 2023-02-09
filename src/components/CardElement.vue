@@ -1,6 +1,7 @@
 <script>
     import "/node_modules/flag-icons/css/flag-icons.css";
     import {store} from '../store';
+    import axios from 'axios';
     export default {
         name:'CardElement',
         props: {
@@ -10,6 +11,9 @@
         data() {
             return {
                 store,
+                show: false,
+                genres: [],
+                cast: [],
             };//return
         },//data
         methods: {
@@ -20,44 +24,100 @@
                 }
                 return 'fa-regular fa-star';
             },//getStarVote
-            getTitle(section){
-                switch (section) {
-                    case 'film': 
+            getTitle(){
+                switch (this.section) {
+                    case 'movie': 
                         return 'title';
                         
-                    case 'serie': 
+                    case 'tv': 
                         return 'name';
                 }//switch
             },//getTitle
+            getDetails(id) {
+                //cancello eventuali risultati precedenti
+                this.genres = [];
+                this.cast = [];
+                
+                //trasformo l'id in stringa per poter fare includes in performRequest()
+                const productId = id.toString()
+                this.performRequest(productId);
+                this.performRequest(`${productId}/credits`);
+            },//getDetails
+            performRequest(id){
+                const url = `https://api.themoviedb.org/3/${this.section}/${id}`;
+                axios.get(url, {
+                    params: {
+                        api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
+                        language: 'it-IT'
+                    }
+                }).then((response) => {
+                    if (id.includes('credits')) {
+                        this.cast = response.data.cast.splice(0,5);
+                    }
+                    else {
+                        this.genres = response.data.genres;
+                    };//if
+                });//richiesta
+            },//performRequest
         },//methods
     };//export
 </script>
 
 <template>
-    <div class="card" v-for="item in list">
+    <div class="card" v-for="item in list" @mouseleave="show = false">
         <img v-if="item.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${item.poster_path}`" :alt="item[getTitle(section)]">
         <div class="info-box">
-            <p>Titolo: {{ item[getTitle(section)] }}</p>
+            <p>
+                <strong>Titolo:</strong>
+                <br>
+                {{ item[getTitle()] }}
+            </p>
             <p v-if="item[getTitle(section)].toLowerCase() != item[`original_${getTitle(section)}`].toLowerCase()">
-                Titolo originale: {{ item[`original_${getTitle(section)}`]}}
+                <strong>Titolo originale:</strong>
+                <br>
+                {{ item[`original_${getTitle()}`]}}
             </p>
             <p>
-                Lingua originale: 
-                <span v-if="item.original_language != 'xx'" :class="`fi fi-${item.original_language}`">  </span>
+                <strong>Lingua originale:</strong>
+                <span v-if="item.original_language != 'xx'" :class="`fi fi-${item.original_language}`"></span>
             </p>
             <div>
-                <span>Valutazione: </span>
+                <strong>Valutazione: </strong>
                 <font-awesome-icon
                 v-for="i in 5"
                 :icon="getStarVote(i, item.vote_average)" />
             </div><!-- CHIUSURA STAR BOX -->
-            <p v-if="item.overview != ''">
-                Overview:
+            <p v-if="item.overview != ''" class="overview">
+                <strong>Overview:</strong>
                 <br>
                 <span>
                     {{ item.overview }}
                 </span>
             </p>
+            <button v-if="show" @click="show = false">
+                Meno info
+            </button>
+            <button v-else @click="show = true, getDetails(item.id)">
+                Voglio saperne di più
+            </button>
+            <div v-if="show" class="show-more">
+                <div class="genres" v-if="genres.length > 0">
+                    <strong>Generi:</strong>
+                    <ul >
+                        <li v-for="gen in genres">
+                            #{{ gen.name }}
+                        </li>
+                    </ul>
+                </div><!-- CHIUSURA GENERE -->
+                <div v-if="cast.length > 0">
+                    <strong>Cast:</strong>
+                    <ul>
+                        <li v-for="member in cast">
+                            {{ member.name }}
+                        </li>
+                    </ul>
+                </div><!-- CHIUSURA CAST -->
+            </div><!-- CHIUSURA SHOW MORE -->
         </div><!-- CHIUSURA INFO BOX -->
     </div><!-- CHIUSURA CARD -->
 </template>
@@ -68,6 +128,7 @@
         margin-bottom: 1rem;
         height: 500px;
         position: relative;
+        text-align: center;
         img {
             height: 100%;
             display: block;
@@ -84,10 +145,39 @@
             left: 0;
             overflow-y: auto;
             opacity: 0;
-            transition: opacity 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            p, div {
+            transition: opacity 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            & > * {
                 margin-bottom: 1rem;
-            }//p
+            }//margine per figli diretti
+            p.overview {
+                text-align: left;
+            }//overview
+
+            button {
+                padding: 0.5rem;
+                width: 60%;
+            }//button
+
+            .show-more {
+                text-align: left;
+                ul {
+                    margin-bottom: 1rem;
+                }//ul
+                .genres {
+                    text-align: center;
+                    ul {
+                        margin-top: 0.5rem;
+                        display: flex;
+                        justify-content: center;
+                        flex-wrap: wrap;
+                        li {
+                            margin-bottom: 0.2rem;
+                            width: calc(100% / 3);
+                            font-size: 0.8rem;
+                        }//li
+                    }//ul
+                }//genres
+            }//show more
         }//info-box
 
         &:hover .info-box{
