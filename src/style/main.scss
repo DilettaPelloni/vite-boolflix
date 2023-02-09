@@ -1,5 +1,11 @@
-//FONT
+// FONT
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+
+// COLORI
+$black-bg: #141414;
+$gray: #3a3a3a;
+$logo-red: #e50914;
 
 // RESET
 * {
@@ -7,6 +13,8 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+// GENERALE
 
 body * {
     font-family: 'Roboto', sans-serif;
@@ -16,6 +24,23 @@ body * {
     padding: 0 3rem;
 }
 
-$black-bg: #141414;
-$logo-red: #e50914;
 
+// SCROLLBAR
+
+::-webkit-scrollbar {
+    width: 0.4em;
+    height: 0.4em;
+}
+
+::-webkit-scrollbar-track {
+background: $gray;
+border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 10px;
+    &:hover {
+        background: $logo-red;
+    }
+}

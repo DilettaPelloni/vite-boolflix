@@ -64,7 +64,7 @@
                 border: 1px solid white;
 
                 &:hover {
-                    background-color: #222222;
+                    background-color: $gray;
                 }//search-wrapper hover
 
                 svg {
