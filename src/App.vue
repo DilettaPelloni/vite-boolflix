@@ -18,44 +18,46 @@
             };//return
         },//data
         methods: {
-            searchFilm() {
+            performSearch(arg) {
+                const url = `https://api.themoviedb.org/3/search/${arg}`
+
                 if (this.store.searchText != '') {
-                    axios.get('https://api.themoviedb.org/3/search/movie', {
+                    axios.get(url, {
                         params: {
                             api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
                             query: this.store.searchText,
                             language: 'it-IT'
                         }
                     }).then((response) => {
-                        this.store.filmList = response.data.results;
-                    });
-                }
+                        switch (arg) {
+                            case 'movie': 
+                                this.store.filmList = response.data.results;
+                                break;
+                                
+                            case 'tv': 
+                            this.store.seriesList = response.data.results;
+                                break;
+                        }//switch
+                    });//richiesta
+                }//if
                 else {
-                    this.store.filmList = [];
-                }
-            },//searchFilm
-            searchSeries() {
-                if (this.store.searchText != '') {
-                    axios.get('https://api.themoviedb.org/3/search/tv', {
-                        params: {
-                            api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
-                            query: this.store.searchText,
-                            language: 'it-IT'
-                        }
-                    }).then((response) => {
-                        this.store.seriesList = response.data.results;
-                    });
-                }
-                else {
-                    this.store.seriesList = [];
-                }
-            },//searchFilm
+                    switch (arg) {
+                        case 'movie': 
+                            this.store.filmList = '';
+                            break;
+                            
+                        case 'tv': 
+                        this.store.seriesList = '';
+                            break;
+                    }//switch 
+                }//else
+            },//performSearch
         },//methods
     };//export
 </script>
 
 <template>
-    <AppHeader @search="searchFilm(), searchSeries()"/>
+    <AppHeader @search="performSearch('movie'), performSearch('tv')"/>
     <AppMain/>
 </template>
 
