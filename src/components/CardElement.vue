@@ -20,22 +20,25 @@
                 }
                 return 'fa-regular fa-star';
             },//getStarVote
+            getTitle(section){
+                switch (section) {
+                    case 'film': 
+                        return 'title';
+                        
+                    case 'serie': 
+                        return 'name';
+                }//switch
+            },//getTitle
         },//methods
     };//export
 </script>
 
 <template>
     <div class="card" v-for="item in list">
-        <img v-if="item.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${item.poster_path}`" alt="item.title">
+        <img v-if="item.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${item.poster_path}`" :alt="item[getTitle(section)]">
         <div class="info-box">
-            <div v-if="section == 'film'">
-                <p>{{ item.title }}</p>
-                <p>{{ item.original_title }}</p>
-            </div>
-            <div v-else>
-                <p>{{ item.name }}</p>
-                <p>{{ item.original_name }}</p>
-            </div>
+            <p>{{ item[getTitle(section)] }}</p>
+            <p>{{ item[`original_${getTitle(section)}`]}}</p>
             <p v-if="item.original_language != 'xx'" :class="`fi fi-${item.original_language}`"></p>
             <div>
                 <font-awesome-icon
