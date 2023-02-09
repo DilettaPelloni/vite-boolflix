@@ -51,6 +51,13 @@
                 v-for="i in 5"
                 :icon="getStarVote(i, item.vote_average)" />
             </div><!-- CHIUSURA STAR BOX -->
+            <p v-if="item.overview != ''">
+                Overview:
+                <br>
+                <span>
+                    {{ item.overview }}
+                </span>
+            </p>
         </div><!-- CHIUSURA INFO BOX -->
     </div><!-- CHIUSURA CARD -->
 </template>
@@ -76,9 +83,10 @@
             position: absolute;
             top: 0;
             left: 0;
+            overflow-y: auto;
             display: none;
 
-            p {
+            p, div {
                 margin-bottom: 1rem;
             }//p
         }//info-box
