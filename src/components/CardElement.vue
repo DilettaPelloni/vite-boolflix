@@ -37,10 +37,16 @@
     <div class="card" v-for="item in list">
         <img v-if="item.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${item.poster_path}`" :alt="item[getTitle(section)]">
         <div class="info-box">
-            <p>{{ item[getTitle(section)] }}</p>
-            <p>{{ item[`original_${getTitle(section)}`]}}</p>
-            <p v-if="item.original_language != 'xx'" :class="`fi fi-${item.original_language}`"></p>
+            <p>Titolo: {{ item[getTitle(section)] }}</p>
+            <p v-if="item[getTitle(section)] != item[`original_${getTitle(section)}`]">
+                Titolo originale: {{ item[`original_${getTitle(section)}`]}}
+            </p>
+            <p>
+                Lingua originale: 
+                <span v-if="item.original_language != 'xx'" :class="`fi fi-${item.original_language}`">  </span>
+            </p>
             <div>
+                <span>Valutazione: </span>
                 <font-awesome-icon
                 v-for="i in 5"
                 :icon="getStarVote(i, item.vote_average)" />
@@ -59,7 +65,7 @@
         img {
             height: 100%;
             display: block;
-        }
+        }//img
 
         .info-box {
             padding: 1rem;
@@ -71,11 +77,15 @@
             top: 0;
             left: 0;
             display: none;
-        }
+
+            p {
+                margin-bottom: 1rem;
+            }//p
+        }//info-box
 
         &:hover .info-box {
             display: block;
             border: 1px solid $logo-red;
-        }
-    }
+        }//hover card x info box
+    }//card
 </style>
