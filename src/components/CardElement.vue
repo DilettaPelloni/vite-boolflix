@@ -38,18 +38,17 @@
                 }).then((response) => {
                     if (stringId.includes('credits')) {
                         this.cast = response.data.cast.splice(0,5);
+                        this.scrollDown();
                     }
                     else {
                         this.genres = response.data.genres;
                     };//if
-                    this.showDetails = true,
-                    this.scrollDown();
+                    this.showDetails = true;
                 });//richiesta
             },//performRequest
             scrollDown() {
                 // vado a prendere il div "info-box"
                 const infoBox = this.$refs.infoBox;
-                console.log(infoBox.scrollHeight)
                 infoBox.scrollTop = infoBox.scrollHeight;
             },//scrollDown
         },//methods
