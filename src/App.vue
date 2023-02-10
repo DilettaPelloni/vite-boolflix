@@ -18,11 +18,18 @@
             };//return
         },//data
         methods: {
-            performSearch(arg) {
+            searchTitles(){
+                this.performSearch('movie');
+                this.performSearch('tv');
+                this.searchGenre('movie');
+                this.searchGenre('tv');
+            },//searchTitles
+
+            performSearch(type) {
                 //per far sparire eventuale contenuto mostrato in precedenza
                 this.store.loaded = false;
 
-                const url = `https://api.themoviedb.org/3/search/${arg}`
+                const url = `https://api.themoviedb.org/3/search/${type}`;
 
                 if (this.store.searchText != '') {
                     axios.get(url, {
@@ -32,7 +39,7 @@
                             language: 'it-IT'
                         }
                     }).then((response) => {
-                        switch (arg) {
+                        switch (type) {
                             case 'movie': 
                                 this.store.filmList = response.data.results;
                                 break;
@@ -41,14 +48,13 @@
                             this.store.seriesList = response.data.results;
                                 break;
                         }//switch
-                        
+
                         //per far apparire il contenuto
                         this.store.loaded = true;
-                        
                     });//richiesta
                 }//if
                 else {
-                    switch (arg) {
+                    switch (type) {
                         case 'movie': 
                             this.store.filmList = '';
                             break;
@@ -59,12 +65,32 @@
                     }//switch 
                 }//else
             },//performSearch
+
+            searchGenre(type) {
+                const url = `https://api.themoviedb.org/3/genre/${type}/list`;
+                axios.get(url, {
+                    params: {
+                        api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
+                        language: 'it-IT'
+                    }
+                }).then((response) => {
+                    switch (type) {
+                        case 'movie': 
+                            this.store.filmGenres = response.data.genres;
+                            break;
+                            
+                        case 'tv': 
+                        this.store.seriesGenres = response.data.genres;
+                            break;
+                    }//switch
+                });//richiesta
+            },//searchGenre
         },//methods
     };//export
 </script>
 
 <template>
-    <AppHeader @search="performSearch('movie'), performSearch('tv')"/>
+    <AppHeader @search="searchTitles()"/>
     <AppMain/>
 </template>
 

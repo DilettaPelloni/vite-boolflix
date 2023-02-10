@@ -38,7 +38,8 @@
                 }).then((response) => {
                     if (stringId.includes('credits')) {
                         this.cast = response.data.cast.splice(0,5);
-                        this.scrollDown();
+                        setTimeout(() => {this.scrollDown()}, 10)
+                        
                     }
                     else {
                         this.genres = response.data.genres;

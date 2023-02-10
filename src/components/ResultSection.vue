@@ -8,7 +8,6 @@
         },//component   
         props: {
             section: String,
-            list: Array,
         },//props
         data() {
             return {
@@ -24,6 +23,23 @@
                         return 'Serie'
                 }
             },//sectionName
+            listName() {
+                switch (this.section) {
+                    case 'movie':
+                        return 'filmList'
+                    case 'tv':
+                        return 'seriesList'
+                }
+            },//listName
+            genreList() {
+                switch (this.section) {
+                    case 'movie':
+                        return 'filmGenres'
+                    case 'tv':
+                        return 'seriesGenres'
+                }
+            },//genreList
+
         },//computed
     };//export
 </script>
@@ -32,17 +48,22 @@
     <section>
         <div class="container">
             <h2> {{ sectionName }}</h2>
-            
             <select
                 name="genreSelect"
                 v-if="store.filmList.length > 0 || store.seriesList.length > 0"
             >
                 <option value="" selected>Seleziona un genere</option>
+                <option
+                    value="gen.name"
+                    v-for="gen in store[genreList]"
+                >
+                    {{ gen.name }}
+                </option>
             </select>
         </div><!-- CHIUSURA CONTAINER -->
         
         <div class="card-box" v-if="store.loaded">
-            <CardElement v-for="item in list" :card="item" :section="section"/>
+            <CardElement v-for="item in store[listName]" :card="item" :section="section"/>
         </div>
     </section>
 </template>
@@ -74,6 +95,10 @@
                 background-color: $logo-red;
                 border-color: $logo-red;
             }//select:hover
+
+            option {
+                background-color: $black-bg;
+            }
         }//select
     }//container
 

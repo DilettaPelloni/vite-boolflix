@@ -29,8 +29,8 @@
             </div>
         </section>
         <section v-else>
-            <ResultSection section="movie" :list="store.filmList"/>
-            <ResultSection section="tv" :list="store.seriesList"/>
+            <ResultSection section="movie"/>
+            <ResultSection section="tv"/>
         </section>
     </main>
 </template>
