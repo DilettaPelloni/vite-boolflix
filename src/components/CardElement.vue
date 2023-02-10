@@ -38,7 +38,7 @@
                 }).then((response) => {
                     if (stringId.includes('credits')) {
                         this.cast = response.data.cast.splice(0,5);
-                        setTimeout(() => {this.scrollDown()}, 10)
+                        setTimeout(() => {this.scrollDown()}, 20)
                         
                     }
                     else {
