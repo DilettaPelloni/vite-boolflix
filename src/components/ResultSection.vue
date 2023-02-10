@@ -32,6 +32,13 @@
     <section>
         <div class="container">
             <h2> {{ sectionName }}</h2>
+            
+            <select
+                name="genreSelect"
+                v-if="store.filmList.length > 0 || store.seriesList.length > 0"
+            >
+                <option value="" selected>Seleziona un genere</option>
+            </select>
         </div><!-- CHIUSURA CONTAINER -->
         
         <div class="card-box" v-if="store.loaded">
@@ -45,12 +52,30 @@
         margin-bottom: 3rem;
     }
 
-    h2 {
+    .container {
         margin-bottom: 1rem;
-        color: white;
-        font-size: 2rem;
-        text-transform: capitalize;
-    }
+        display: flex;
+        align-items: center;
+        h2 {
+            margin-right: 2rem;
+            color: white;
+            font-size: 2rem;
+            text-transform: capitalize;
+        }//h2
+        select {
+            margin-right: 2rem;
+            padding: 0.5rem;
+            border: 1px solid white;
+            outline: none;
+            color: white;
+            background-color: transparent;
+
+            &:hover {
+                background-color: $logo-red;
+                border-color: $logo-red;
+            }//select:hover
+        }//select
+    }//container
 
     .card-box {
         margin-left: 3rem;

@@ -20,12 +20,6 @@
                 <form
                     @submit.prevent="$emit('search')"
                 >
-                    <select
-                        name="genreSelect"
-                        v-if="store.filmList.length > 0 || store.seriesList.length > 0"
-                    >
-                        <option value="" selected>Seleziona un genere</option>
-                    </select>
 
                     <div class="search-wrapper">
                         <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
@@ -68,20 +62,6 @@
     .search-bar {
         form {
             display: flex;
-
-            select {
-                margin-right: 2rem;
-                padding: 0.5rem;
-                border: 1px solid white;
-                outline: none;
-                color: white;
-                background-color: transparent;
-
-                &:hover {
-                    background-color: $logo-red;
-                    border-color: $logo-red;
-                }//select:hover
-            }//select
             .search-wrapper {
                 margin-right: 2rem;
                 padding: 0.5rem;
