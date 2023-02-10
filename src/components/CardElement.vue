@@ -1,106 +1,122 @@
 <script>
     import "/node_modules/flag-icons/css/flag-icons.css";
-    import {store} from '../store';
     import axios from 'axios';
     export default {
         name:'CardElement',
         props: {
+            card: Object,
             section: String,
-            list: Array,
         },//props
         data() {
             return {
-                store,
-                show: false,
+                showDetails: false,
                 genres: [],
                 cast: [],
             };//return
         },//data
         methods: {
-            getStarVote(i, vote) {
-                const starVote = Math.ceil(vote / 2);
+            getStarVote(i) {
+                const starVote = Math.ceil(this.card.vote_average / 2);
                 if(starVote >= i) {
                     return 'fa-solid fa-star';
                 }
                 return 'fa-regular fa-star';
             },//getStarVote
-            getTitle(){
-                switch (this.section) {
-                    case 'movie': 
-                        return 'title';
-                        
-                    case 'tv': 
-                        return 'name';
-                }//switch
-            },//getTitle
-            getDetails(id) {
-                //cancello eventuali risultati precedenti
-                this.genres = [];
-                this.cast = [];
-                
+            getDetails() {
                 //trasformo l'id in stringa per poter fare includes in performRequest()
-                const productId = id.toString()
-                this.performRequest(productId);
-                this.performRequest(`${productId}/credits`);
+                const stringId = this.card.id.toString()
+                this.performRequest(stringId);
+                this.performRequest(`${stringId}/credits`);
             },//getDetails
-            performRequest(id){
-                const url = `https://api.themoviedb.org/3/${this.section}/${id}`;
+            performRequest(stringId){
+                const url = `https://api.themoviedb.org/3/${this.section}/${stringId}`;
                 axios.get(url, {
                     params: {
                         api_key: 'e3bcdf9f6b96589610abc1b9aabec335',
                         language: 'it-IT'
                     }
                 }).then((response) => {
-                    if (id.includes('credits')) {
+                    if (stringId.includes('credits')) {
                         this.cast = response.data.cast.splice(0,5);
                     }
                     else {
                         this.genres = response.data.genres;
                     };//if
+                    this.showDetails = true,
+                    this.scrollDown();
                 });//richiesta
             },//performRequest
+            scrollDown() {
+                // vado a prendere il div "info-box"
+                const infoBox = this.$refs.infoBox;
+                console.log(infoBox.scrollHeight)
+                infoBox.scrollTop = infoBox.scrollHeight;
+            },//scrollDown
         },//methods
     };//export
 </script>
 
 <template>
-    <div class="card" v-for="item in list" @mouseleave="show = false">
-        <img v-if="item.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${item.poster_path}`" :alt="item[getTitle(section)]">
-        <div class="info-box">
+    <div class="card" @mouseleave="showDetails = false">
+        <!-- IMMAGINE -->
+        <img
+            v-if="card.poster_path != null"
+            :src="`https://image.tmdb.org/t/p/w342${card.poster_path}`"
+            :alt="card.title || card.name"
+        >
+        <!-- INFO BOX -->
+        <div class="info-box" ref="infoBox">
+            <!-- TITOLO -->
             <p>
                 <strong>Titolo:</strong>
                 <br>
-                {{ item[getTitle()] }}
+                {{ card.title || card.name }}
             </p>
-            <p v-if="item[getTitle(section)].toLowerCase() != item[`original_${getTitle(section)}`].toLowerCase()">
+            <!-- TITOLO ORIGINALE -->
+            <p
+                v-if="(card.title || card.name).toLowerCase() != (card.original_title || card.original_name).toLowerCase()"
+            >
                 <strong>Titolo originale:</strong>
                 <br>
-                {{ item[`original_${getTitle()}`]}}
+                {{ card.original_title || card.original_name }}
             </p>
-            <p>
+            <!-- LINGUA -->
+            <p class="lang">
                 <strong>Lingua originale:</strong>
-                <span v-if="item.original_language != 'xx'" :class="`fi fi-${item.original_language}`"></span>
+                <span
+                    v-if="card.original_language != 'xx'"
+                    :class="`fi fi-${card.original_language}`">
+                </span>
             </p>
-            <div>
+            <!-- VALUTAZIONE -->
+            <div class="star-box">
                 <strong>Valutazione: </strong>
                 <font-awesome-icon
-                v-for="i in 5"
-                :icon="getStarVote(i, item.vote_average)" />
-            </div><!-- CHIUSURA STAR BOX -->
-            <p v-if="item.overview != ''" class="overview">
+                    v-for="i in 5"
+                    :icon="getStarVote(i)"
+                />
+            </div>
+            <!-- OVERVIEW -->
+            <p
+                v-if="card.overview != ''"
+                class="overview"
+            >
                 <strong>Overview:</strong>
                 <br>
                 <span>
-                    {{ item.overview }}
+                    {{ card.overview }}
                 </span>
             </p>
-            <button v-if="show" @click="show = false">
+            <!-- BOTTONI -->
+            <button v-if="showDetails" @click="showDetails = false">
                 Meno info
             </button>
-            <button v-else @click="show = true, getDetails(item.id)">
+            <button v-else @click="getDetails()">
                 Voglio saperne di più
             </button>
-            <div v-if="show" class="show-more">
+            <!-- DETTAGLI -->
+            <div v-if="showDetails" class="show-more">
+                <!-- GENERE -->
                 <div class="genres" v-if="genres.length > 0">
                     <strong>Generi:</strong>
                     <ul >
@@ -108,7 +124,8 @@
                             #{{ gen.name }}
                         </li>
                     </ul>
-                </div><!-- CHIUSURA GENERE -->
+                </div>
+                <!-- CAST -->
                 <div v-if="cast.length > 0">
                     <strong>Cast:</strong>
                     <ul>
@@ -116,7 +133,8 @@
                             {{ member.name }}
                         </li>
                     </ul>
-                </div><!-- CHIUSURA CAST -->
+                </div>
+
             </div><!-- CHIUSURA SHOW MORE -->
         </div><!-- CHIUSURA INFO BOX -->
     </div><!-- CHIUSURA CARD -->
@@ -149,6 +167,12 @@
             & > * {
                 margin-bottom: 1rem;
             }//margine per figli diretti
+            .lang strong {
+                margin-right: 0.5rem;
+            }
+            .star-box svg{
+                color: $logo-red;
+            }
             p.overview {
                 text-align: left;
             }//overview

@@ -35,7 +35,7 @@
         </div><!-- CHIUSURA CONTAINER -->
         
         <div class="card-box" v-if="store.loaded">
-            <CardElement :section="section" :list="list"/>
+            <CardElement v-for="item in list" :card="item" :section="section"/>
         </div>
     </section>
 </template>
