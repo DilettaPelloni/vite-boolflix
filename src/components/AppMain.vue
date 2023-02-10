@@ -4,11 +4,13 @@
     import {store} from '../store';
     // COMPONENTI
     import ResultSection from './ResultSection.vue';
+    import ALTresultSection from './ALTresultSection.vue';
 
     export default {
         name:'AppMain',
         components: {
            ResultSection,
+           ALTresultSection,
         },//components
         data() {
             return {
@@ -31,6 +33,8 @@
         <section v-else>
             <ResultSection section="movie"/>
             <ResultSection section="tv"/>
+            <ALTresultSection section="movie"/>
+            <ALTresultSection section="tv"/>
         </section>
     </main>
 </template>
